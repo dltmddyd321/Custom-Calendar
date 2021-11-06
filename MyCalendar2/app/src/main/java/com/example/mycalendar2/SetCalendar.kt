@@ -25,11 +25,11 @@ open class SetCalendar @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     override fun onClick(v: View?) {
-        onDayClickListener?.onDateClick(this, todayDate)
+        onDayClickListener?.onDayClick(this, todayDate)
     }
 
     interface OnDayClickListener {
-        fun onDateClick(v:SetCalendar, date: Calendar)
+        fun onDayClick(v:SetCalendar, date: Calendar)
     }
 
     //기본 달력 일자 배치 함수
@@ -50,7 +50,7 @@ open class SetCalendar @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     //실제 시간의 달과 일치하지 않으면 텍스트 색상 변경
-    fun isCurrentMonth(isCurrentMonth:Boolean){
+    fun isNowMonth(isCurrentMonth:Boolean){
         if(!isCurrentMonth){
             calendarBinding.dayviewTvDay.setTextColor(Color.LTGRAY)
             onDayClickListener = null

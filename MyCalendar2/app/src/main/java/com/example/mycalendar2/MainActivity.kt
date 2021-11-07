@@ -3,8 +3,11 @@ package com.example.mycalendar2
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.TableLayout
 import android.widget.TableRow
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.example.mycalendar2.databinding.ActivityMainBinding
 import java.util.*
 
@@ -49,14 +52,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 setCalendar.isNowMonth(dateCnt.get(Calendar.MONTH) == calendar.get(Calendar.MONTH))
                 weekDays.addView(setCalendar)
 
+                if (dateCnt.time == endDay.time) {
+                    isRestartMonth = true
+                    break
+                }
+
+                dateCnt.add(Calendar.DATE, 1)
             }
 
+            binding.mainLayoutCalendar.addView(weekDays)
         }
     }
 
     private var calendarListener = object : SetCalendar.OnDayClickListener {
         override fun onDayClick(v: SetCalendar, date: Calendar) {
-            //DIALOG
+            val dialogBuilder = AlertDialog.Builder(this@MainActivity)
+            val dialogView = layoutInflater.inflate(R.layout.dialog_addevent, null)
+            val dialogDateTextView = dialogView.findViewById<TextView>(R.id.dateTextView)
+            val dialogMemoEditText =dialogView.findViewById<EditText>(R.id.eventEditText)
+
+//            dialogBuilder.setView(dialogView)
+//                .setPositiveButton("등록하기") {
+//                    //view를 추가하고 등록버튼 클릭 시 메모 추가 되도록 구현
+//                }
         }
     }
 

@@ -3,14 +3,19 @@ package com.example.mycalendar2
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.example.mycalendar2.databinding.ActivityMainBinding
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -33,6 +38,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     //Dialog가 추가될때마다 새로 View를 갱신해주어야하므로 달력 생성 함수를 개별적으로 분리
     private fun createCalendarView(calendar: Calendar) {
+
         //상단의 년도와 월자 값을 연결
         calendarBinding.mainYear.text = calendar.get(Calendar.YEAR).toString()
         calendarBinding.mainMonth.text = (calendar.get(Calendar.MONTH) + 1).toString()
@@ -105,11 +111,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v?.id) {
+        when(v!!.id) {
             R.id.nextBtn -> {
                 calendar.add(Calendar.MONTH, 1)
             }
-
             R.id.previousBtn -> {
                 calendar.add(Calendar.MONTH, -1)
             }
@@ -128,4 +133,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         return eventView
     }
+
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:paddingHorizontal="30sp">
+
+    <TextView
+        android:id="@+id/dialogDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Today"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/eventEditText"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="Event title" />
+
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/updateBtn"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="40sp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="#0000FF"-->
+<!--        android:text="등록"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textStyle="bold" />-->
+
+
+</LinearLayout>

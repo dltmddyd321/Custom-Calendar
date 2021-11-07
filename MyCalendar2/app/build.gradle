@@ -32,6 +32,8 @@ android {
     buildFeatures {
         viewBinding true
     }
+    //noinspection DataBindingWithoutKapt
+    dataBinding{ enabled = true }
 }
 
 dependencies {

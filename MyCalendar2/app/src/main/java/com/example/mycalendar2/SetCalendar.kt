@@ -78,6 +78,7 @@ open class SetCalendar @JvmOverloads constructor(
         if ((todayDate.get(Calendar.MONTH) + 1) == thisMonth) {
             if (date.get(Calendar.DATE) == today) {
                 calendarBinding.dateNumber.setTextColor(Color.GREEN)
+                calendarBinding.dateNumber.setBackgroundColor(Color.MAGENTA)
             }
         }
     }

@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         //상단의 년도와 월자 값을 연결
         calendarBinding.mainYear.text = calendar.get(Calendar.YEAR).toString()
-        calendarBinding.mainMonth.text = (calendar.get(Calendar.MONTH) + 1).toString()
+        calendarBinding.mainMonth.text = (calendar.get(Calendar.MONTH) +1).toString()
 
         //Calendar 객체를 복사하여 시작 날짜, 종료 날짜에 대한 상황별로 나누어 날짜 추가 및 등록
         var startDay: Calendar = calendar.clone() as Calendar
@@ -55,14 +55,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         //시작 일자에 대한 Calendar 복사 값으로 한 달이 끝났는지 여부를 판단할 요소
         var dateCnt: Calendar = startDay.clone() as Calendar
+
+        //한달 치 날짜 추가
         endDay.add(Calendar.MONTH, 1)
+
+        //한달 끝 하루 뒤의 날짜 (1일)
         endDay.set(Calendar.DATE, 1)
-        endDay.add(Calendar.DATE, -1)
+
+        //한달 끝 다음 일주일 단위의 주 1개 삭제
+        endDay.add(Calendar.DAY_OF_WEEK, -1)
+
+        //7일 단위 Set
         endDay.set(Calendar.DAY_OF_WEEK, 7)
 
+        //새로운 달의 시작 유무를 알리는 상태 변수
         var isRestartMonth = false
+
+        //새로운 달이 시작할때(True)가 될 때까지 순회
         while (!isRestartMonth) {
+            //Table Row 객체를 생성하여 내부에 달력 일수를 삽입
             val weekCalendar = TableRow(this)
+
+            //주 단위로 순회 후 View 생성
             for (i in 0..6) {
                 val setCalendar = SetCalendar(this)
                 setCalendar.setDate(dateCnt.clone() as Calendar)
@@ -94,8 +108,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             //DateFormat 지정 후 날짜 값을 문자열로 받아온 뒤, 배열로 변환
             val dateFormat: DateFormat = SimpleDateFormat("EEE-d-MMM")
+
+            //요일명
             val pickDayName = dateFormat.format(date.time).split("-")[0]
+
+            //일
             val pickDay = dateFormat.format(date.time).split("-")[1]
+
+            //월
             val monthPickDay = dateFormat.format(date.time).split("-")[2]
 
             dialogDate.text = "$pickDayName, $pickDay $monthPickDay"
@@ -143,9 +163,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         eventView.gravity = Gravity.CENTER
         eventView.textSize = 15f
         eventView.setTextColor(Color.WHITE)
-        eventView.compoundDrawablePadding
 
         return eventView
+    }
+
+    fun createLongEventMemo() {
+
     }
 
 }

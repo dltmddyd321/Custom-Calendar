@@ -6,10 +6,12 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.marginBottom
 import com.example.mycalendar2.databinding.ActivityMainBinding
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -43,24 +45,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         calendarBinding.mainYear.text = calendar.get(Calendar.YEAR).toString()
         calendarBinding.mainMonth.text = (calendar.get(Calendar.MONTH) + 1).toString()
 
+        //Calendar 객체를 복사하여 시작 날짜, 종료 날짜에 대한 상황별로 나누어 날짜 추가 및 등록
         var startDay: Calendar = calendar.clone() as Calendar
         startDay.set(Calendar.WEEK_OF_MONTH, 1)
         startDay.set(Calendar.DAY_OF_WEEK, 1)
 
-
+        //마지막 일자에 대한 Calendar 복사 값
         var endDay: Calendar = calendar.clone() as Calendar
-        var dateCnt: Calendar = startDay.clone() as Calendar
 
+        //시작 일자에 대한 Calendar 복사 값으로 한 달이 끝났는지 여부를 판단할 요소
+        var dateCnt: Calendar = startDay.clone() as Calendar
         endDay.add(Calendar.MONTH, 1)
         endDay.set(Calendar.DATE, 1)
-
         endDay.add(Calendar.DATE, -1)
         endDay.set(Calendar.DAY_OF_WEEK, 7)
 
         var isRestartMonth = false
         while (!isRestartMonth) {
             val weekCalendar = TableRow(this)
-            for(i in 0..6) {
+            for (i in 0..6) {
                 val setCalendar = SetCalendar(this)
                 setCalendar.setDate(dateCnt.clone() as Calendar)
                 setCalendar.onDayClickListener = calendarListener
@@ -68,12 +71,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 weekCalendar.addView(setCalendar)
 
                 //마지막 일자가 계속 넘겨져온 현재 날짜와 같다면 새로운 달의 시작을 판별
-                if(dateCnt.time == endDay.time) {
+                if (dateCnt.time == endDay.time) {
                     isRestartMonth = true
                     break
                 }
+
+                //하루씩 일자 더하기
                 dateCnt.add(Calendar.DATE, 1)
             }
+            //Table 형태로 그려진 View를 상위 Layout View에 삽입
             calendarBinding.mainLayoutCalendar.addView(weekCalendar)
         }
     }
@@ -81,10 +87,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var calendarListener = object : SetCalendar.OnDayClickListener {
         override fun onDayClick(v: SetCalendar, date: Calendar) {
             val dialog = AlertDialog.Builder(this@MainActivity)
+                .create()
             val dialogView = layoutInflater.inflate(R.layout.dialog_add_memo_custom, null)
             val dialogDate = dialogView.findViewById<TextView>(R.id.dialogDate)
             val dialogMemo = dialogView.findViewById<EditText>(R.id.eventEditText)
 
+            //DateFormat 지정 후 날짜 값을 문자열로 받아온 뒤, 배열로 변환
             val dateFormat: DateFormat = SimpleDateFormat("EEE-d-MMM")
             val pickDayName = dateFormat.format(date.time).split("-")[0]
             val pickDay = dateFormat.format(date.time).split("-")[1]
@@ -92,12 +100,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             dialogDate.text = "$pickDayName, $pickDay $monthPickDay"
 
-            dialog.setView(dialogView)
-                .setPositiveButton("메모 등록") { _: DialogInterface?, _: Int ->
-                    v.calendarBinding.root.addView(createEventMemo(dialogMemo.text.toString()))
-                }.show()
+            val saveBtn = dialogView.findViewById<Button>(R.id.updateButton)
+            saveBtn.setOnClickListener {
+                v.calendarBinding.root.addView(createEventMemo(dialogMemo.text.toString()))
+                dialog.dismiss()
+            }
 
-//            dialog 확인 등록 버튼 가운데로 옮기려 했지만 구현 실패 -> How to bring a getButton??
+            dialog.setView(dialogView)
+            dialog.show()
+
 //            val positiveBtn = dialog.context.getColor(AlertDialog.BUTTON_POSITIVE)
 
 //            val dialog = CalendarDialog(this@MainActivity)
@@ -111,7 +122,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id) {
+        when (v!!.id) {
             R.id.nextBtn -> {
                 calendar.add(Calendar.MONTH, 1)
             }
@@ -124,12 +135,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         createCalendarView(calendar)
     }
 
-    fun createEventMemo(str : String): TextView {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun createEventMemo(str: String): TextView {
         val eventView = TextView(this)
+        eventView.background = resources.getDrawable(R.drawable.round_memo)
         eventView.text = str
+        eventView.gravity = Gravity.CENTER
         eventView.textSize = 15f
         eventView.setTextColor(Color.WHITE)
-        eventView.setBackgroundColor(Color.parseColor("#de7478"))
+        eventView.compoundDrawablePadding
 
         return eventView
     }
